@@ -209,3 +209,10 @@ body {
 .container.active .toggle-right {
   transform: translateX(200%);
 }
+
+.span-error {
+  margin-top: 5px;
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+}

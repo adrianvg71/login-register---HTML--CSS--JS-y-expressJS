@@ -29,13 +29,19 @@ app.post('/registro', (req, res) => {
     const data = fs.readFileSync('./data/users.json', 'utf8');
     const users = JSON.parse(data);
 
-    // Agregar el nuevo usuario a la matriz de usuarios
-    users.users.push({ correo, nombre, contraseña });
+    // Verificar si el correo ya existe en la matriz de usuarios
+    if (users.users.some(user => user.correo === correo)) {
+      // El correo ya existe, envía un mensaje de error
+      res.status(400).json({ message: 'El correo ya está registrado' });
+    } else {
+      // Agregar el nuevo usuario a la matriz de usuarios
+      users.users.push({ correo, nombre, contraseña });
 
-    // Guardar la matriz actualizada en el archivo JSON (usa la misma ruta)
-    fs.writeFileSync('./data/users.json', JSON.stringify(users, null, 2), 'utf8');
+      // Guardar la matriz actualizada en el archivo JSON (usa la misma ruta)
+      fs.writeFileSync('./data/users.json', JSON.stringify(users, null, 2), 'utf8');
 
-    res.status(200).json({ message: 'Usuario registrado con éxito' });
+      res.status(200).json({ message: 'Usuario registrado con éxito' });
+    }
   } catch (error) {
     console.error('Error al registrar usuario:', error);
     res.status(500).json({ message: 'Error al registrar usuario' });
